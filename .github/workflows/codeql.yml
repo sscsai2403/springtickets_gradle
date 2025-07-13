@@ -41,7 +41,6 @@ jobs:
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-
     - name: Manual build
       run: ./gradlew clean build --no-daemon --stacktrace
 
