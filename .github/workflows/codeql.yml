@@ -41,8 +41,9 @@ jobs:
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-    - name: Manual build
-      run: ./gradlew clean build --no-daemon --stacktrace
+
+    - name: Manual build (assemble)
+      run: ./gradlew clean assemble --no-daemon --stacktrace
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
