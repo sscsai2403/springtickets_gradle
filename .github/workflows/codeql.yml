@@ -38,11 +38,8 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-
-    - name: Build project
-      run: ./gradlew build --no-daemon
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
