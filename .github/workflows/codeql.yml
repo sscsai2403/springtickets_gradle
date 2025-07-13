@@ -32,18 +32,28 @@ jobs:
       with:
         distribution: temurin
         java-version: '17'
+- name: Initialize CodeQL
+  uses: github/codeql-action/init@v3
+  with:
+    languages: java
+    build-mode: none
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: ${{ matrix.language }}
-        build-mode: manual
+- name: Make gradlew executable
+  run: chmod +x ./gradlew
 
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
+- name: Manual build
+  run: ./gradlew clean assemble --no-daemon --stacktrace
 
-    - name: Manual build (assemble)
-      run: ./gradlew clean assemble --no-daemon --stacktrace
+- name: Create CodeQL database manually
+  run: |
+    mkdir -p codeql-db
+    codeql database create codeql-db --language=java --source-root=src/main/java --command="javac -d build/classes/java/main $(find src/main/java -name '*.java')"
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+- name: Perform CodeQL Analysis manually
+  run: |
+    codeql database analyze codeql-db --format=sarif-latest --output=codeql.sarif
+
+- name: Upload SARIF
+  uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: codeql.sarif
