@@ -25,6 +25,14 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.10.0'
 }
+task printClasses {
+    doLast {
+        fileTree('build/classes/java/main').visit { FileVisitDetails details ->
+            println "Compiled class: ${details.file}"
+        }
+    }
+}
+
 
 test {
     useJUnitPlatform()
